@@ -1,0 +1,63 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+
+	{% if request.user.is_authenticated %}
+
+		<!-- {% trans 'Your username is' %} <b>{{ request.user.username }}</b>. -->
+		<style>
+			.container {
+			  display: grid;
+			  grid: repeat(3, 12vw) / auto-flow;
+			}
+
+			.row {
+			  display: grid;
+			  grid: repeat(1, 12vw) / auto-flow;
+			}
+
+			.row > .square {
+			  margin: 10px;
+			  background: tomato;
+			}
+
+			@media (orientation: portrait) {
+			  
+			  .container {
+			    transform: rotate(90deg) translate(35%);
+			  }
+			  
+			  .row > .square {
+			    transform: rotate(-90deg);
+			  }
+			}
+		</style>
+		
+		<div class="container">
+		  <div class="row">
+		    <a href="{% url 'storages' %}"class="square"> Хранилища </a>
+		    <a href="#" class="square">Документы на руках </a>
+		  </div>
+		  <div class="row">
+		    <a href="{% url 'docs' %}" class="square">Документы </a>
+		    <a href="#" class="square">Справка</a>
+		  </div>
+		</div>
+
+
+		
+
+		<br>
+		<a href="{% url 'storages' %}">{% trans 'Storages' %}</a><br>
+		<a href="{% url 'docs' %}">{% trans 'Documents' %}</a><br>
+
+	{% else %}
+
+		{% trans 'You are a guest.' %}
+
+	{% endif %}
+
+{% endblock %}

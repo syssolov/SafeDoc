@@ -1,0 +1,54 @@
+Content-Type: multipart/alternative;
+ boundary="===============0122200498555236436=="
+MIME-Version: 1.0
+Subject: =?utf-8?b?0JDQutGC0LjQstCw0YbQuNGPINC/0YDQvtGE0LjQu9GP?=
+From: test@example.com
+To: artyom.syssolov@gmial.com
+Date: Mon, 23 Aug 2021 15:27:50 -0000
+Message-ID: 
+ <162973247052.97248.12263504342139234818@kz-lhqit79443.hcg.homecredit.net>
+
+--===============0122200498555236436==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+
+
+
+Для активации вашего профиля, перейдите по этой ссылке:
+
+http://127.0.0.1:8000/accounts/activate/3Ez1DE1IZrasi6lshw4q/
+
+--===============0122200498555236436==
+Content-Type: text/html; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Активация профиля</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+
+<p>
+    Для активации вашего профиля, перейдите по этой ссылке:
+</p>
+
+<p>
+    <a href="http://127.0.0.1:8000/accounts/activate/3Ez1DE1IZrasi6lshw4q/">http://127.0.0.1:8000/accounts/activate/3Ez1DE1IZrasi6lshw4q/</a>
+</p>
+
+</body>
+
+</html>
+
+--===============0122200498555236436==--
+
+-------------------------------------------------------------------------------

@@ -1,0 +1,65 @@
+{% extends 'layouts/default/page.html' %}
+
+{% block title %} Справка {% endblock %}
+
+{% load i18n %}
+
+{% block content %}
+    <title>Справка</title>
+    {% if request.user.is_authenticated %}
+
+        <style type="text/css">
+            .fa-btn-icons {
+              /*margin-left: 10px;*/
+              margin: 0 10px 0 20px;
+            }
+        </style>
+
+        <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-2">
+                    
+              </div>
+              <div class="col-md-8">
+                  <div class="card" style="box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 3px;">
+                      <div class="card-header" >
+                        <h5><i class="fa fa-info-circle fa-btn-icons" aria-hidden="true"></i>Справка</h5>
+                      </div>
+                      <div class="card-body">
+                        <!-- <center> -->
+                          <h6>Название:<i class="fa fa-info-circle fa-btn-icons" aria-hidden="true"></i><b>Doc safe</b></h6><br/>
+                          <table>
+                            <tr>
+                              <td style="vertical-align: text-top;">
+                                <div >
+                                  <h6>Создатели:</h6>
+                                </div>
+                              </td>
+                              <td>
+                                <i class="fa fa-user fa-btn-icons" ></i> Шаповалов В.В. <br/>
+                                <i class="fa fa-user fa-btn-icons" ></i> Насыров К.М. <br/>
+                                <i class="fa fa-user fa-btn-icons"></i> Токсынов Ш.М. <br/>
+                                <i class="fa fa-user fa-btn-icons"></i> Бергибаев Б.А. <br/>
+                              </td>
+                            </tr>
+                          </table>
+                          <hr>
+                          <h6>Дата создания:</h6> <i class="fa fa-date fa-btn-icons" ></i> 25 августа 2021 года
+                        <!-- </center> -->
+                      </div>
+                  </div>      
+                  <br><br><br>
+      
+              </div>
+              <div class="col-md-2">
+                  
+              </div>
+            </div>
+        </div>
+
+
+    {% else %}
+        {% trans 'You are a guest.' %}
+    {% endif %}
+
+{% endblock %}

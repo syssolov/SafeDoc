@@ -1,0 +1,96 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+
+{% block content %}
+<title>Выход</title>
+<style>
+/*@import url('https://fonts.googleapis.com/css?family=Numans');*/
+
+html,body{
+/*background-image: url('https://nuo.kz/wp-content/uploads/2020/06/Univer.jpg');*/
+background: rgba(0,0,0,.2);
+background-size: cover;
+background-repeat: no-repeat;
+height: 100%;
+font-family: 'Numans', sans-serif;
+}
+html,body:after {
+    background: rgba(0,0,0,.5);
+} 
+.container{
+height: 100%;
+align-content: center;
+}
+
+.card{
+/*height: 370px;*/
+margin-top: auto;
+margin-bottom: auto;
+width: 400px;
+background-color: rgba(243,156,17,0.8) !important;
+}
+
+.card-header h3{
+color: white;
+}
+
+.input-group-prepend span{
+width: 50px;
+background-color: #FFC312;
+color: black;
+border:0 !important;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.login_again{
+border: 5px;
+padding: 10px;
+color: black;
+background-color: #FFC312;
+width: 100%;
+}
+
+.login_again:hover{
+color: black;
+background-color: white;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
+</style>
+
+<br><br><br>
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Вход</h3>
+<!--                 <div class="d-flex justify-content-end social_icon">
+                    <span><i class="fab fa-facebook-square"></i></span>
+                    <span><i class="fab fa-google-plus-square"></i></span>
+                    <span><i class="fab fa-twitter-square"></i></span>
+                </div> -->
+            </div>
+            <div class="card-body">
+            	<div class=".login_again">
+                	<h4><a href="{% url 'accounts:log_in' %}">{% trans 'Log in again' %}</a></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+{% endblock %}

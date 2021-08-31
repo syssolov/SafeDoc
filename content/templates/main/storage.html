@@ -1,0 +1,119 @@
+{% extends 'layouts/default/page.html' %}
+
+{% block title %} Хранилища {% endblock %}
+
+{% load i18n %}
+
+{% block content %}
+	<title>Хранилища</title>
+	{% if request.user.is_authenticated %}
+
+{% if user.is_superuser %}
+<style type="text/css">
+	.form-field {
+		margin: 10px 5px 5px 5px;
+	}
+	.dot {
+		height: 25px;
+		width: 25px;
+		background-color: #bbb;
+		border-radius: 50%;
+		display: inline-block;
+		text-align: center;
+		color: white;
+	}
+</style>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-9">
+			<div class="card" style="box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 3px;">
+				<div class="card-header" >
+					<div class="float-right">
+						<form class="form-inline" action="{% url 'storages' %}" method="GET">
+							<div class="form-group mx-sm-3 mb-2">
+								<input name="storage_name" type="text" class="form-control" placeholder="Введите название хранилища">
+							</div>
+							<button type="submit" class="btn btn-primary mb-2">Поиск</button>
+						</form>
+					</div>
+				</div>
+				<div class="card-body">
+					<table class="table table-hover table-bordered">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Наименование хранилища</th>
+								<th scope="col">Количество полок</th>
+								<th scope="col">Количество сейфов в ряду</th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for storage in storages %}
+								<tr>
+									<th scope="row">{{ storage.id }}</th>
+									<td>{{ storage.storage_name }}</td>
+									<td>{{ storage.cells_rows_count }}</td>
+									<td>{{ storage.cells_columns_count }}</td>
+									<td>
+										<form action="{% url 'storages' %}" method="POST">
+											{% csrf_token %}
+											<input type="hidden" value="{{ storage.id }}" name="pk">
+											<!-- <input type="submit" value="Удалить" name="" class="btn btn-outline-danger delete-item"> -->
+											<button type="submit" class="btn btn-outline-danger delete-item" style="margin-left: 10px;"><i class="fa fa-trash"></i></button>
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>      
+			<br><br><br>
+
+		</div>
+		<div class="col-md-3">
+			<div class="card" style="box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 3px;">
+				<div class="card-header" >
+					<i class="fa fa-plus-circle" style="margin-right: 10px;"></i> Новое хранилище 
+				</div>
+				<div class="card-body">
+					<form method="post">
+						{% csrf_token %}
+						<div class="form-field">
+							{{ form.storage_name }}
+						</div>
+						<div class="form-field">
+							{{ form.cells_rows_count }}
+						</div>
+						<div class="form-field">
+							{{ form.cells_columns_count }}
+						</div>
+						<div class="form-field">
+							<button type="submit" class="btn btn-success" style="width: 100%;"> {% trans 'Add' %} </button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- https://stackoverflow.com/questions/31888566/sort-table-rows-in-bootstrap -->
+<script type="text/javascript">
+	$('.delete-item').click((event) => {
+		if (! confirm("Вы действительно хотите удалить данное хранилище?")){
+		   event.preventDefault();
+		}
+	});
+</script>
+{% endif %}
+
+	{% else %}
+
+		{% trans 'You are a guest.' %}
+
+	{% endif %}
+
+{% endblock %}
