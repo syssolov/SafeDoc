@@ -34,3 +34,12 @@ class DocsInUseAdmin(admin.ModelAdmin):
 class DocsInstanceAdmin(admin.ModelAdmin):
 	list_display = ('document', 'unique_number', 'created_at', )
 	list_filter = ('document', 'unique_number', 'created_at')
+
+
+@admin.register(History)
+class HistoryAdmin(admin.ModelAdmin):
+	list_display = ('doc_name', 'doc_instance_unique_number', 'action', 'who_use', 'description', 'created_at', )
+
+	class Meta:
+		verbose_name = 'История'
+		verbose_name_plural = 'История'

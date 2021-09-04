@@ -1,0 +1,215 @@
+{% extends 'layouts/default/page.html' %}
+
+{% block title %} Документы {% endblock %}
+
+{% load i18n %}
+
+{% block content %}
+<title>История</title>
+<!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
+<!-- <script  src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+
+<!-- <link href="http://nicesnippets.com/demo/stiff-chart.css" rel="stylesheet"/>
+<script src="http://nicesnippets.com/demo/stiffChart.js"></script> -->
+
+<style type="text/css">
+	.timeline {
+		list-style-type: none;
+		position: relative;
+	}
+	.timeline:before {
+		content: ' ';
+		background: #d4d9df;
+		display: inline-block;
+		position: absolute;
+		left: 29px;
+		width: 2px;
+		height: 100%;
+		z-index: 400;
+	}
+	.date {
+		color: #999;
+		font-style: oblique
+	}
+	.timeline > .circle-green {
+		margin: 20px 0;
+		padding-left: 20px;
+	}
+	.timeline > .circle-green:before {
+		content: ' ';
+		background: white;
+		display: inline-block;
+		position: absolute;
+		border-radius: 50%;
+		border: 3px solid #43dcbe;
+		left: 20px;
+		width: 20px;
+		height: 20px;
+		z-index: 400;
+	}
+	.timeline > .circle-red {
+		margin: 20px 0;
+		padding-left: 20px;
+	}
+	.timeline > .circle-red:before {
+		content: ' ';
+		background: white;
+		display: inline-block;
+		position: absolute;
+		border-radius: 50%;
+		border: 3px solid #f69;
+		left: 20px;
+		width: 20px;
+		height: 20px;
+		z-index: 400;
+	}
+	.timeline > .circle-blue {
+		margin: 20px 0;
+		padding-left: 20px;
+	}
+	.timeline > .circle-blue:before {
+		content: ' ';
+		background: white;
+		display: inline-block;
+		position: absolute;
+		border-radius: 50%;
+		border: 3px solid #69f;
+		left: 20px;
+		width: 20px;
+		height: 20px;
+		z-index: 400;
+	}
+	.timeline > .circle-yellow {
+		margin: 20px 0;
+		padding-left: 20px;
+	}
+	.timeline > .circle-yellow:before {
+		content: ' ';
+		background: white;
+		display: inline-block;
+		position: absolute;
+		border-radius: 50%;
+		border: 3px solid #fc6;
+		left: 20px;
+		width: 20px;
+		height: 20px;
+		z-index: 400;
+	}
+	.docs-row {
+		cursor: alias;
+	}
+	.fa-icon {
+		padding: 0 10px 0 0;
+	}
+</style>
+ 
+<div class="container-fluid" id="doc-history">
+	<div class="row">
+		<div class="col-md-7">
+			<div class="card" style="box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 3px;">
+				<div class="card-header" >
+                    <div class="float-right">
+                        <form class="form-inline">
+                            <div class="form-group mx-sm-3 mb-2">
+                                <input v-model="search_query" name="doc_name" type="text" class="form-control" placeholder="По названию" size="40">
+                            </div>
+                            <button v-on:click="search()" type="button" class="btn btn-primary mb-2">Поиск</button>
+                        </form>
+                    </div>
+                </div>
+				<div class="card-body">
+					<div class="accordion" id="history">
+					  <div v-for="(doc, doc_id) in docs" class="card docs-row">
+					    <div class="card-header" id="headingOne">
+					      <h2 class="mb-0">
+					        <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#doc-collapse-'+doc_id" aria-expanded="true">
+					          <i class="fas fa-file fa-icon"></i> [[ doc.doc_name ]]
+					        </button>
+					      </h2>
+					    </div>
+
+					    <div :id="'doc-collapse-'+doc_id" class="collapse" data-parent="#history">
+					      <div class="card-body">
+
+							<ul v-for="(instance, instance_id) in doc.instances" class="list-group">
+								<li v-on:click="drawTimeLine(doc_id, instance_id)" class="list-group-item">
+									<i class="fas fa-copy fa-icon"></i>[[ instance_id ]]
+								</li>
+							</ul>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-5">
+			<div v-if="instance.doc_instance_unique_number!=null" class="card" id="instance-info" style="box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 3px;">
+			  <div class="card-header">
+				<h5><i class="fas fa-copy fa-icon"></i> [[instance.doc_name]] [[ instance.doc_instance_unique_number ]]</h5>
+			  </div>
+			  <div class="card-body">
+				<div class="pre-scrollable" style="max-height: 70vh;">
+				<ul class="timeline">
+					<li v-for="item in instance.timeline" :class="corr_table[item.action][1]">
+						<a href="#">[[ corr_table[item.action][0] ]]</a>
+						<a href="#" class="date">-- [[ item.created_at ]]</a>
+						<p>[[ item.who_use ]]</p>
+					</li>
+				</ul>
+				</div>
+			  </div>
+			</div>		
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
+
+const registerVue = new Vue({
+	el: '#doc-history',
+	delimiters: ['[[', ']]'],
+	data: {
+		docs: {},
+		corr_table: {
+				1: ["Создан", "circle-blue"],
+				2: ["Удален", "circle-red"],
+				3: ["Изменен", "circle-blue"],
+				4: ["Выдан", "circle-yellow"],
+				5: ["Принят", "circle-green"]
+		},
+		instance: {doc_instance_unique_number: null, timeline: []},
+		search_query: '',
+	},
+	methods: {
+		drawTimeLine: function (doc_id, instance_id){
+			this.instance.doc_instance_unique_number = instance_id;
+			this.instance.timeline = this.docs[doc_id]['instances'][instance_id];
+		},
+		search: function (){
+			console.log(this.search_query);
+			this.loadData();
+		},
+		loadData: function(){
+			let data = new FormData();
+			data.append("search_query", this.search_query)
+
+			axios.post('', data)
+				.then(res => {
+					console.log(res.data);
+					this.docs = res.data;
+				})
+				.catch(errors => console.log(errors))
+		},
+	},
+	created: function(){
+		this.loadData();
+	}
+})
+</script>
+
+{% endblock %}

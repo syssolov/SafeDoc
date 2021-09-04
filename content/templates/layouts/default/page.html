@@ -21,7 +21,8 @@
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/fontawesome-free-5.15.4-web/css/all.css' %}" rel="stylesheet">
-
+    <script src="{% static 'vue.js' %}"></script>
+    <script src="{% static 'axios.js' %}"></script>
 </head>
 
 <body>
@@ -81,6 +82,15 @@
                     <div class="inactive-item">
                     {% endif %}
                         <a class="nav-link" href="{% url 'docs' %}">Документы</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    {% if request.resolver_match.url_name == "history" %}
+                    <div class="active-item">
+                    {% else %}
+                    <div class="inactive-item">
+                    {% endif %}
+                        <a class="nav-link" href="{% url 'history' %}">История</a>
                     </div>
                 </li>
                 <li class="nav-item">

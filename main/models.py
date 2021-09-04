@@ -70,4 +70,25 @@ class DocsInUse(models.Model):
 
 	# 	super(DocsInUse, self).save(*args, **kwargs)
 
+from django.utils import timezone
+
+class History(models.Model):
+	ACTIONS = [
+		(1, ("Создан")),
+		(2, ("Удален")),
+		(3, ("Изменен")),
+		(4, ("Выдан")),
+		(5, ("Принят")),
+	]
+
+	action = models.IntegerField(choices=ACTIONS)
+	doc_name = models.CharField(max_length=500, null=False)
+	doc_id = models.IntegerField(null=False)
+	doc_instance_unique_number = models.CharField(max_length=500, null=True, blank=True)
+	who_use = models.CharField(max_length=500, null=True, blank=True)
+	description = models.CharField(max_length=1200, null=True, blank=True)
+	created_at = models.DateTimeField(default=timezone.now)
+
+	def __str__(self):
+		return f"{self.doc_name}"
 

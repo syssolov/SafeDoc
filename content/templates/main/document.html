@@ -69,7 +69,7 @@
                             <div class="float-right">
                                 <form class="form-inline" action="{% url 'docs' %}" method="GET">
                                     <div class="form-group mx-sm-3 mb-2">
-                                        <input name="doc_name" type="text" class="form-control" placeholder="По названию">
+                                        <input name="doc_name" type="text" class="form-control" placeholder="По названию"size="40">
                                     </div>
                                     <button type="submit" class="btn btn-primary mb-2">Поиск</button>
                                 </form>
@@ -300,6 +300,17 @@
 
 <!-- <button class="btn btn-danger"></button> -->
 <script type="text/javascript">
+    function unique(arr) {
+        var hash = {}, result = [];
+        for ( var i = 0, l = arr.length; i < l; ++i ) {
+            if ( !hash.hasOwnProperty(arr[i]) ) { //it works with objects! in FF, at least
+                hash[ arr[i] ] = true;
+                result.push(arr[i]);
+            }
+        }
+        return result;
+    }
+
     function clear_arr(arr, value){
       while (true){
         let index = arr.indexOf(value);
@@ -321,11 +332,13 @@
       clear_arr(items, "");
       clear_arr(items, " ");
 
+      items = unique(items);
+
       $("#istance-count-value").html(items.length);
-      $("#doc-instances-storage").val(items)
+      $("#doc-instances-storage").val(items);
 
       for (let i=0; i<items.length; i++) {
-        content += `<span class="btn btn-success doc-instances-view">${items[i]}</span>`;;
+        content += `<span class="btn btn-success doc-instances-view">${items[i]}</span>`;
       }
       $("#doc-instances-content").html(content);
     });
