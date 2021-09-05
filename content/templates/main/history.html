@@ -4,6 +4,8 @@
 
 {% load i18n %}
 
+{% load static %}
+
 {% block content %}
 <title>История</title>
 <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
@@ -101,6 +103,11 @@
 	.fa-icon {
 		padding: 0 10px 0 0;
 	}
+	.icon{
+		width: 25px;
+	   /*background:url("{% static 'media/icon-excel.png' %}") no-repeat left center;*/
+	   /*padding-left:20px;*/
+	}   
 </style>
  
 <div class="container-fluid" id="doc-history">
@@ -108,12 +115,20 @@
 		<div class="col-md-7">
 			<div class="card" style="box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 3px;">
 				<div class="card-header" >
+					<div class="float-left">
+
+						<a :href="pathToReport" class="btn btn-outline-success" alt="Отчет" download> 
+							<img src="{% static 'media/icon-excel.png' %}" class="icon"/> Выгрузить отчет
+						</a>
+					</div>
                     <div class="float-right">
+                    	
                         <form class="form-inline">
                             <div class="form-group mx-sm-3 mb-2">
-                                <input v-model="search_query" name="doc_name" type="text" class="form-control" placeholder="По названию" size="40">
+                                <input v-model="search_query" name="doc_name" type="text" class="form-control" placeholder="Введите название документа или ключевые слова"size="47">
                             </div>
                             <button v-on:click="search()" type="button" class="btn btn-primary mb-2">Поиск</button>
+
                         </form>
                     </div>
                 </div>
@@ -165,7 +180,6 @@
 	</div>
 </div>
 
-
 <script type="text/javascript">
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -184,6 +198,7 @@ const registerVue = new Vue({
 		},
 		instance: {doc_instance_unique_number: null, timeline: []},
 		search_query: '',
+		pathToReport: '#'
 	},
 	methods: {
 		drawTimeLine: function (doc_id, instance_id){
@@ -201,13 +216,15 @@ const registerVue = new Vue({
 			axios.post('', data)
 				.then(res => {
 					console.log(res.data);
-					this.docs = res.data;
+					this.docs = res.data.history;
+					this.pathToReport = `${window.location.origin}/${res.data.report_path}`;
 				})
 				.catch(errors => console.log(errors))
 		},
 	},
 	created: function(){
 		this.loadData();
+		console.log(window.location.origin);
 	}
 })
 </script>

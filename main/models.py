@@ -72,6 +72,9 @@ class DocsInUse(models.Model):
 
 from django.utils import timezone
 
+def defaul_time():
+	return timezone.now() + timezone.timedelta(hours=6)
+
 class History(models.Model):
 	ACTIONS = [
 		(1, ("Создан")),
@@ -87,8 +90,11 @@ class History(models.Model):
 	doc_instance_unique_number = models.CharField(max_length=500, null=True, blank=True)
 	who_use = models.CharField(max_length=500, null=True, blank=True)
 	description = models.CharField(max_length=1200, null=True, blank=True)
-	created_at = models.DateTimeField(default=timezone.now)
+	created_at = models.DateTimeField(default=defaul_time)
 
 	def __str__(self):
 		return f"{self.doc_name}"
+
+	class Meta:
+		ordering = ('-doc_id', )
 

@@ -69,7 +69,7 @@
                             <div class="float-right">
                                 <form class="form-inline" action="{% url 'docs' %}" method="GET">
                                     <div class="form-group mx-sm-3 mb-2">
-                                        <input name="doc_name" type="text" class="form-control" placeholder="По названию"size="40">
+                                        <input name="doc_name" type="text" class="form-control" placeholder="Введите название документа или ключевые слова"size="47">
                                     </div>
                                     <button type="submit" class="btn btn-primary mb-2">Поиск</button>
                                 </form>
@@ -86,7 +86,7 @@
                                         {% if user.is_superuser %}
                                         <th scope="col" style="text-align: center;">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                              <button type="button" class="btn btn-info">Количество</button>
+                                              <button type="button" class="btn btn-info">Всего</button>
                                               <button type="button" class="btn btn-warning">Выдано</button>
                                             </div>
                                             <!-- Количество экземпляров / Выдано -->
@@ -280,7 +280,7 @@
                                 </div> -->
                                 <div class="form-field" style="padding: 5px; border: 1px solid #cccccc; border-radius: 5px;">
                                   <input type="hidden" name="doc-instances-storage" id="doc-instances-storage"> 
-                                  <textarea id="doc-instances" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Введите идентификаторы копий документа через пробел" value="test"></textarea>
+                                  <textarea id="doc-instances" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Сведения об экземплярах документа" value="test"></textarea>
                                   <div class="form-field">
                                     <div id="doc-instances-content"></div>
                                     Количество экземпляров: <span id="istance-count-value">0</span>

@@ -14,7 +14,7 @@ class StorageForm(ModelForm):
 			}),
 			"cells_rows_count": NumberInput(attrs={
 				"class": "form-control",
-				"placeholder": "Количество полок"
+				"placeholder": "Номер сейфа"
 			}),
 			"cells_columns_count": NumberInput(attrs={
 				"class": "form-control",

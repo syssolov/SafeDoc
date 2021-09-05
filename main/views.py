@@ -11,7 +11,9 @@ from .forms import *
 from .filters import *
 
 import json
-
+import xlwt
+from django.conf import settings as django_settings
+import os
 
 class ChangeLanguageView(TemplateView):
 	template_name = 'main/change_language.html'
@@ -197,13 +199,45 @@ class HistoryPageView(TemplateView):
 
 	def post(self, request, *args, **kwargs):
 		search_query = check_empty(request.POST.get('search_query'))
-		print(f"\n\n request.POST={request.POST} \n\n")
-		# search_query = '5668468'
+
 		history = History.objects.filter(
 			Q(doc_name__icontains=search_query) |\
 			Q(doc_instance_unique_number__icontains=search_query)).all()
-
 		
+		### to excel
+		font = xlwt.Font()
+		font.name = 'Times New Roman'
+
+		wb = xlwt.Workbook()
+		ws = wb.add_sheet('История')
+
+		header = ['#', 'Действие', 'Наименование документа', 'Экземпляр', 'Кому выдавался', 'Дата', 'Время']
+		header_style = xlwt.XFStyle()
+		header_style.font.bold = True
+		for index, head in enumerate(header):
+			ws.write(0, index, head, header_style)
+
+		style = xlwt.XFStyle()
+		style.font = font
+		date_format = xlwt.XFStyle()
+		date_format.num_format_str = 'dd/mm/yyyy'
+		for index, row in enumerate(history):
+			index += 1
+			ws.write(index, 0, index, style)
+			ws.write(index, 1, History.ACTIONS[row.action-1][1], style)
+			ws.write(index, 2, row.doc_name, style)
+			ws.write(index, 3, row.doc_instance_unique_number, style)
+			ws.write(index, 4, row.who_use, style)
+			ws.write(index, 5, row.created_at.strftime("%d-%m-%Y"), style)
+			ws.write(index, 6, row.created_at.strftime("%H:%M:%S"), style)
+			ws.write(index, 7, row.description, style)
+
+		reports_dir = 'reports'
+		report_name = 'report.xls'
+		report_path = os.path.join(django_settings.MEDIA_ROOT, reports_dir, report_name)
+		wb.save(report_path)
+		### --end-- to excel
+
 		data = {}
 		for log in history:
 			if log.doc_id not in data:
@@ -216,14 +250,12 @@ class HistoryPageView(TemplateView):
 					'doc_name': log.doc_name,
 					'action': log.action,
 					'who_use': log.who_use,
-					'created_at': log.created_at.strftime("%d/%m/%Y, %H:%M:%S"),
+					'created_at': log.created_at.strftime("%d-%m-%Y, %H:%M:%S"),
 					'description': log.description,
 				}
 			)
 
-		print(f"\n\n{data}\n\n")
+		# print(f"\n\nrequest.get_full_path() -> {request.get_full_path()}\n\n")
+		response = {'history': data, 'report_path': f"media/{reports_dir}/{report_name}"}
 
-		return HttpResponse( json.dumps(data, ensure_ascii=False) )
-
-		# return HttpResponse( json.dumps( data ) )
-#######################################
+		return HttpResponse(json.dumps(response, ensure_ascii=False))

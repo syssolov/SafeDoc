@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     # Application apps
     'main',
     'accounts',
+    'xlwt',
 ]
 
 MIDDLEWARE = [
